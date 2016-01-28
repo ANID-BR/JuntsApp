@@ -10,3 +10,7 @@ gradlew.bat
 .DS_Store
 /build
 /captures
+gradlew
+gradlew.bat
+.idea/misc.xml
+.idea/gradle.xml

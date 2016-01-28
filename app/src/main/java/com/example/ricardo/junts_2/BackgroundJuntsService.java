@@ -1,36 +1,24 @@
-<<<<<<< HEAD
-
-package com.example.ricardo.junts_2;
-
-=======
 package com.example.ricardo.junts_2;
 
 import android.Manifest;
->>>>>>> b75d5e458316f423ccfd05575e5cbd37427fdcbf
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-<<<<<<< HEAD
+
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
-=======
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Binder;
-import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
->>>>>>> b75d5e458316f423ccfd05575e5cbd37427fdcbf
 
 public class BackgroundJuntsService extends Service {
 
@@ -48,12 +36,7 @@ public class BackgroundJuntsService extends Service {
 
     @Override
     public void onCreate() {
-<<<<<<< HEAD
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
-        newtext = "BackGroundApp Service Running";
-        PendingIntent contentIntent = PendingIntent.getActivity(BackgroundJuntsService.this, 0, new Intent(BackgroundJuntsService.this, DadosClienteActivity.class), 0);
-=======
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean GPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
@@ -72,7 +55,6 @@ public class BackgroundJuntsService extends Service {
 
         newtext = "BackGroundApp Service Running";
         PendingIntent contentIntent = PendingIntent.getActivity(BackgroundJuntsService.this, 0, new Intent(BackgroundJuntsService.this,   DadosClienteActivity.class), 0);
->>>>>>> b75d5e458316f423ccfd05575e5cbd37427fdcbf
 
         NotificationCompat.Builder notification = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -110,8 +92,4 @@ public class BackgroundJuntsService extends Service {
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b75d5e458316f423ccfd05575e5cbd37427fdcbf

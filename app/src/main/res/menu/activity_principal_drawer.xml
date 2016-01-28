@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_dados"
+            android:icon="@android:drawable/btn_star"
+            android:title="Meus dados" />
+
+        <item android:title="Meu Junts">
+            <menu>
+                <item
+                    android:id="@+id/nav_pontos"
+                    android:icon="@android:drawable/ic_dialog_map"
+                    android:title="Locais de acesso" />
+            </menu>
+        </item>
+        <item android:title="Ações">
+            <menu>
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@android:drawable/presence_offline"
+                    android:title="Deslogar" />
+            </menu>
+        </item>
+    </group>
+</menu>

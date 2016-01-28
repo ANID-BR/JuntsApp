@@ -17,7 +17,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
 public class BackgroundJuntsService extends Service {
@@ -33,8 +32,7 @@ public class BackgroundJuntsService extends Service {
         }
     }
 
-    @Override
-    public void onCreate() {
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean GPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -53,9 +51,10 @@ public class BackgroundJuntsService extends Service {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
         newtext = "BackGroundApp Service Running";
-        Intent intent = new Intent(BackgroundJuntsService.this,   DadosClienteActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent contentIntent = PendingIntent.getActivity(BackgroundJuntsService.this, 0, intent, 0);
+        Intent intentPrincipal = new Intent(BackgroundJuntsService.this,   PrincipalActivity.class);
+        intentPrincipal.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intentPrincipal.putExtra("DadosCliente", intent.getStringExtra("DadosCliente"));
+        PendingIntent contentIntent = PendingIntent.getActivity(BackgroundJuntsService.this, 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Junts")
@@ -64,9 +63,7 @@ public class BackgroundJuntsService extends Service {
         Notification notification = notificationBuilder.build();
         notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
         mNM.notify(R.string.local_service_started, notification);
-    }
 
-    public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
     public void onDestroy() {

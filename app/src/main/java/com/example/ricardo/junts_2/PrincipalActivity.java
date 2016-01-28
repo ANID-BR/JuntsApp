@@ -2,10 +2,12 @@ package com.example.ricardo.junts_2;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,12 +20,16 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private String nome;
+    private String email;
+    private Intent intentService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,33 +38,49 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Mais Informações.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(PrincipalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            Toast.makeText(getApplicationContext(),"GPS permission allows us to access location data. Please allow in App Settings for additional functionality.",Toast.LENGTH_LONG).show();
+        String extrasJson = getIntent().getStringExtra("DadosCliente");
+        if( extrasJson == null ) {
+            Intent intentLogin = new Intent(PrincipalActivity.this, LoginActivity.class);
+            startActivity(intentLogin);
         } else {
-            ActivityCompat.requestPermissions(PrincipalActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_CODE);
-        }
+            JSONObject trendLists;
+            try {
+                trendLists = new JSONObject(extrasJson);
+                nome = trendLists.getString("nome");
+                email = trendLists.getString("email");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        Intent intentService = new Intent(PrincipalActivity.this, BackgroundJuntsService.class);
-        intentService.putExtra("DadosCliente", getIntent().getStringExtra("DadosCliente"));
-        startService(intentService);
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Mais Informações.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+            if ( ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.shouldShowRequestPermissionRationale(PrincipalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(getApplicationContext(), "GPS permission allows us to access location data. Please allow in App Settings for additional functionality.", Toast.LENGTH_LONG).show();
+            } else {
+                ActivityCompat.requestPermissions(PrincipalActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+            }
+
+            intentService = new Intent(PrincipalActivity.this, BackgroundJuntsService.class);
+            intentService.putExtra("DadosCliente", getIntent().getStringExtra("DadosCliente"));
+            startService(intentService);
+
+        }
 
     }
 
@@ -78,15 +100,12 @@ public class PrincipalActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.principal, menu);
 
         try {
-            String extrasJson = getIntent().getStringExtra("DadosCliente");
-
-            JSONObject trendLists = new JSONObject(extrasJson);
 
             TextView nomeCliente = (TextView) findViewById(R.id.nomeCliente);
-            nomeCliente.setText(trendLists.getString("nome"));
+            nomeCliente.setText(nome);
 
             TextView emailCliente = (TextView) findViewById(R.id.emailCliente);
-            emailCliente.setText(trendLists.getString("email"));
+            emailCliente.setText(email);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,5 +147,10 @@ public class PrincipalActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

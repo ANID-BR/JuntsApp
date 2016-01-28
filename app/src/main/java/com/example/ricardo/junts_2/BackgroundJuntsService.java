@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class BackgroundJuntsService extends Service {
 
     private NotificationManager mNM;
-    Bundle b;
+    private String dadosCliente;
     private final IBinder mBinder = new LocalBinder();
     private String newtext;
 
@@ -53,7 +53,10 @@ public class BackgroundJuntsService extends Service {
         newtext = "BackGroundApp Service Running";
         Intent intentPrincipal = new Intent(BackgroundJuntsService.this,   PrincipalActivity.class);
         intentPrincipal.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intentPrincipal.putExtra("DadosCliente", intent.getStringExtra("DadosCliente"));
+        if( dadosCliente == null ) {
+            dadosCliente = intent.getStringExtra("DadosCliente");
+        }
+        intentPrincipal.putExtra("DadosCliente", dadosCliente);
         PendingIntent contentIntent = PendingIntent.getActivity(BackgroundJuntsService.this, 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -64,7 +67,7 @@ public class BackgroundJuntsService extends Service {
         notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
         mNM.notify(R.string.local_service_started, notification);
 
-        return START_STICKY;
+        return START_REDELIVER_INTENT;
     }
     public void onDestroy() {
         mNM.cancel(R.string.local_service_started);

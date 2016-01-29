@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -18,16 +17,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_principal">
-        </activity>
+            android:label="@string/title_activity_principal"></activity>
         <activity
             android:name=".PrincipalActivity"
             android:label="@string/title_activity_principal"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -43,9 +38,19 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
 
-        <service android:enabled="true" android:name=".BackgroundJuntsService" />
+        <service
+            android:name=".BackgroundJuntsService"
+            android:enabled="true" />
+
+        <activity android:name=".SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

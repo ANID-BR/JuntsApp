@@ -18,16 +18,14 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_principal"></activity>
+            android:label="@string/title_activity_principal" />
         <activity
             android:name=".LogoutActivity"
-            android:label="@string/title_activity_principal"></activity>
+            android:label="@string/title_activity_principal" />
         <activity
             android:name=".PrincipalActivity"
             android:label="@string/title_activity_principal"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -48,14 +46,33 @@
             android:name=".BackgroundJuntsService"
             android:enabled="true" />
 
-        <activity android:name=".SplashScreenActivity"
+        <activity
+            android:name=".SplashScreenActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LocalListActivity"
+            android:label="@string/title_local_list"
+            android:parentActivityName=".PrincipalActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ricardo.junts_2.PrincipalActivity" />
+        </activity>
+        <activity
+            android:name=".LocalDetailActivity"
+            android:label="@string/title_local_detail"
+            android:parentActivityName=".LocalListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ricardo.junts_2.LocalListActivity" />
         </activity>
     </application>
 

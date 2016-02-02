@@ -154,7 +154,7 @@ public class PrincipalActivity extends AppCompatActivity
         if (id == R.id.nav_dados) {
             // Handle the camera action
         } else if (id == R.id.nav_pontos) {
-            Intent i = new Intent(getBaseContext(), MapsActivity.class);
+            Intent i = new Intent(getBaseContext(), LocalListActivity.class);
 
             startActivity(i);
         } else if (id == R.id.nav_logout) {

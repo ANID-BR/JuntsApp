@@ -62,6 +62,13 @@ public class LogoutActivity extends AppCompatActivity {
             }
             return true;
         }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            finishAffinity();
+        }
     }
 
 

@@ -33,6 +33,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -154,9 +155,15 @@ public class PrincipalActivity extends AppCompatActivity
         if (id == R.id.nav_dados) {
             // Handle the camera action
         } else if (id == R.id.nav_pontos) {
-            Intent i = new Intent(getBaseContext(), MapsActivity.class);
 
-            startActivity(i);
+            Intent i = new Intent(getBaseContext(), MapsActivity.class);
+            HashMap localizacaoAtual = MyLocationListener.localizacaoAtual;
+            if (localizacaoAtual == null) {
+                Toast.makeText(getApplicationContext(), "Pegando sua localização, por favor aguarde.", Toast.LENGTH_LONG).show();
+            } else {
+                startActivity(i);
+            }
+
         } else if (id == R.id.nav_logout) {
             //TODO Call logout
             Intent logoutIntent = new Intent(PrincipalActivity.this, LogoutActivity.class);

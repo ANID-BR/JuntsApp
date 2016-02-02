@@ -3,7 +3,9 @@ package com.example.ricardo.junts_2;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -475,7 +477,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Toast.makeText(getApplication().getBaseContext(),"Bem Vindo ao JUNTS!",Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getBaseContext(), PrincipalActivity.class);
                
-                //TODO Enviar o JSON para a Activity
                 i.putExtra("DadosCliente", resposta);
 
                 startActivity(i);
@@ -507,6 +508,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 Log.e("TesteJUNTS", ucon.getHeaderField("Location"));
 
+                //TODO teste para pegar dados da URL
+                String URLServer = ucon.getHeaderField("Location");
+                String[] serverSliced = URLServer.split("/");
+                String serverJunts = serverSliced[2];
+                if(serverJunts.indexOf("google") == -1) {
+                    //Guarda em variavel informaçao do servidor
+                    SharedPreferences dadosServerJunts = getSharedPreferences("Dados",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = dadosServerJunts.edit();
+                    editor.putString("URLJunts", serverJunts);
+                    editor.commit();
+
+                    Log.e("LoginRadius", serverJunts);
+                }
+
                 url = new URL(ucon.getHeaderField("Location"));
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -528,8 +543,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 int responseCode=conn.getResponseCode();
                 Log.e("TesteJUNTS", "Entrou!");
 
-                return responseCode == HttpsURLConnection.HTTP_OK;
-                //Log.e("TesteJUNTS", response);
+                //Log.e("LoginRadius", responseCode);
+                return true;
+
             } catch (Exception e) {
                 Log.e("JUNTS Exception", "Deu Erro");
                 e.printStackTrace();

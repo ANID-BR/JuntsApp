@@ -153,9 +153,6 @@ public class PrincipalActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_dados) {
-            // Handle the camera action
-        } else if (id == R.id.nav_pontos) {
-
             Intent i = new Intent(getBaseContext(), MapsActivity.class);
             HashMap localizacaoAtual = MyLocationListener.localizacaoAtual;
             if (localizacaoAtual == null) {
@@ -163,6 +160,7 @@ public class PrincipalActivity extends AppCompatActivity
             } else {
                 startActivity(i);
             }
+        } else if (id == R.id.nav_pontos) {
 
         } else if (id == R.id.nav_logout) {
             //TODO Call logout

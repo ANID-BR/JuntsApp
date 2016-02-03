@@ -35,8 +35,10 @@ public class LocalDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, String.valueOf(item.latitude)+" | "+String.valueOf(item.longitude), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intentMap = new Intent(LocalDetailActivity.this, MapsActivity.class);
+                intentMap.putExtra("latitude", item.latitude);
+                intentMap.putExtra("longitude", item.longitude);
+                startActivity(intentMap);
             }
         });
 

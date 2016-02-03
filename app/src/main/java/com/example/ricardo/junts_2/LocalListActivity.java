@@ -21,6 +21,8 @@ import android.view.MenuItem;
 
 import com.example.ricardo.junts_2.dummy.LocalConteudo;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -50,7 +52,7 @@ public class LocalListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-    private String jsonLocais;
+    protected static String jsonLocais;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,8 @@ public class LocalListActivity extends AppCompatActivity {
 
         View recyclerView = findViewById(R.id.local_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        LocaisJsonTask locaisJsonTask = new LocaisJsonTask();
+        locaisJsonTask.execute(recyclerView);
 
         if (findViewById(R.id.local_detail_container) != null) {
             // The detail container view will be present only in the
@@ -106,7 +109,60 @@ public class LocalListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(LocalConteudo.ITEMS));
+        try {
+            LocalConteudo localConteudo = new LocalConteudo(LocalListActivity.jsonLocais);
+            recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(localConteudo.ITEMS));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class LocaisJsonTask extends AsyncTask<View, Void, View> {
+
+        @Override
+        protected View doInBackground(View... params) {
+            try {
+                URL url = new URL("http://www.junts.com.br/opix/getLocais.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                int responseCode = conn.getResponseCode();
+                String response = "";
+
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null) {
+                        response += line;
+                    }
+
+                } else {
+                    response = "Nada";
+                }
+                LocalListActivity.jsonLocais = response;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(View params) {
+            super.onPostExecute(params);
+
+            setupRecyclerView((RecyclerView) params);
+        }
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -128,8 +184,8 @@ public class LocalListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).detalhes);
+            holder.mIdView.setText(mValues.get(position).seq);
+            holder.mContentView.setText(mValues.get(position).nome);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

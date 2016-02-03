@@ -11,6 +11,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.example.ricardo.junts_2.dummy.LocalConteudo;
+
 /**
  * An activity representing a single Local detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -18,6 +20,7 @@ import android.view.MenuItem;
  * in a {@link LocalListActivity}.
  */
 public class LocalDetailActivity extends AppCompatActivity {
+    protected static LocalConteudo.LocalItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +29,13 @@ public class LocalDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
+        item = LocalConteudo.ITEM_MAP.get(getIntent().getStringExtra(LocalDetailFragment.ARG_ITEM_ID));
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, String.valueOf(item.latitude)+" | "+String.valueOf(item.longitude), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

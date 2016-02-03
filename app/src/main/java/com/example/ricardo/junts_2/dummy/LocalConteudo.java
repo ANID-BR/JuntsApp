@@ -31,14 +31,23 @@ public class LocalConteudo {
 
         JSONArray jsonArray = new JSONArray(jsonLocais);
 
+        ITEMS.clear();
+        ITEM_MAP.clear();
+
         int tamanhoJsonArray = jsonArray.length();
         for (int i = 0; i < tamanhoJsonArray; i++) {
             JSONObject itemJsonArray = jsonArray.getJSONObject(i);
-            addItem(new LocalItem(itemJsonArray.getString("id"),
-                                  itemJsonArray.getString("nome"),
-                                  itemJsonArray.getString("localizacao"),
-                                  itemJsonArray.getDouble("latitude"),
-                                  itemJsonArray.getDouble("longitude")));
+            String id = itemJsonArray.getString("id");
+            String nome = itemJsonArray.getString("nome");
+            String localizacao = itemJsonArray.getString("localizacao");
+            Double latitude = itemJsonArray.getDouble("latitude");
+            Double longitude = itemJsonArray.getDouble("longitude");
+            addItem(new LocalItem(String.valueOf(i+1),
+                                  id,
+                                  nome,
+                                  localizacao,
+                                  latitude,
+                                  longitude));
         }
 
     }
@@ -52,13 +61,15 @@ public class LocalConteudo {
      * A dummy item representing a piece of content.
      */
     public static class LocalItem {
+        public final String seq;
         public final String id;
         public final String nome;
         public final String detalhes;
         public final Double latitude;
         public final Double longitude;
 
-        public LocalItem(String id, String nome, String detalhes, Double latitude, Double longitude) {
+        public LocalItem(String seq, String id, String nome, String detalhes, Double latitude, Double longitude) {
+            this.seq = seq;
             this.id = id;
             this.nome = nome;
             this.detalhes = detalhes;

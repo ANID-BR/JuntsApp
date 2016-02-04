@@ -1,6 +1,7 @@
 package com.example.ricardo.junts_2;
 
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -235,8 +236,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(2);
-                lineOptions.color(Color.RED);
+                lineOptions.width(4);
+                lineOptions.color(Color.BLUE);
             }
 
             // Drawing polyline in the Google Map for the i-th route

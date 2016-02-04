@@ -1,16 +1,14 @@
 package com.example.ricardo.junts_2;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,21 +21,20 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.drive.internal.StringListResponse;
+import com.example.ricardo.junts_2.dummy.LocalConteudo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import com.example.ricardo.junts_2.LogoutActivity;
+import javax.net.ssl.HttpsURLConnection;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -93,6 +90,9 @@ public class PrincipalActivity extends AppCompatActivity
                     ActivityCompat.requestPermissions(PrincipalActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
                 }
             }
+
+            LocaisJsonTask locaisJsonTask = new LocaisJsonTask();
+            locaisJsonTask.execute();
 
             intentService = new Intent(PrincipalActivity.this, BackgroundJuntsService.class);
             intentService.putExtra("DadosCliente", getIntent().getStringExtra("DadosCliente"));
@@ -172,5 +172,50 @@ public class PrincipalActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public class LocaisJsonTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                URL url = new URL("http://www.junts.com.br/opix/getLocais.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                int responseCode = conn.getResponseCode();
+                String response = "";
+
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null) {
+                        response += line;
+                    }
+
+                } else {
+                    response = "Nada";
+                }
+                LocalListActivity.jsonLocais = response;
+                LocalConteudo localConteudo = new LocalConteudo(LocalListActivity.jsonLocais);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return true;
+        }
+
     }
 }

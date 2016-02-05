@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ricardo.junts_2.dummy.LocalConteudo;
 
@@ -38,7 +39,12 @@ public class LocalDetailActivity extends AppCompatActivity {
                 Intent intentMap = new Intent(LocalDetailActivity.this, MapsActivity.class);
                 intentMap.putExtra("latitude", item.latitude);
                 intentMap.putExtra("longitude", item.longitude);
-                startActivity(intentMap);
+
+                if(MyLocationListener.localizacaoAtual == null) {
+                    Toast.makeText(getApplicationContext(), "Aguarde, estamos verificando sua localizaçao", Toast.LENGTH_LONG).show();
+                } else {
+                    startActivity(intentMap);
+                }
             }
         });
 

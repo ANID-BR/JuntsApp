@@ -3,7 +3,6 @@ package com.example.ricardo.junts_2;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -124,6 +123,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        final Intent cadastroIntent = new Intent(getBaseContext(), CadastroActivity.class);
+        Button mCadastreButton = (Button) findViewById(R.id.cadastre_button);
+        mCadastreButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(cadastroIntent);
             }
         });
 

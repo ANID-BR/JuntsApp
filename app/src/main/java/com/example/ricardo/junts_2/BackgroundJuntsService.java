@@ -19,9 +19,11 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class BackgroundJuntsService extends Service {
 
-    private NotificationManager mNM;
+    private static NotificationManager mNM;
     private String dadosCliente;
     private final IBinder mBinder = new LocalBinder();
     private String newtext;
@@ -78,4 +80,23 @@ public class BackgroundJuntsService extends Service {
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
+
+    public static void alertaPontoProximo(Context context, LatLng latitudeLongitudePonto) {
+
+        Intent intentPrincipal = new Intent(context, MapsActivity.class);
+        intentPrincipal.putExtra("latitude", latitudeLongitudePonto.latitude);
+        intentPrincipal.putExtra("longitude", latitudeLongitudePonto.longitude);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
+        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(context)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Junts")
+                .setContentText("Há um ponto Junts próximo a você, clique para visualizá-lo")
+                .setContentIntent(contentIntent);
+        Notification notification = notificationBuilder.build();
+        notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
+        mNM.notify(R.string.local_service_started, notification);
+
+    }
+
+
 }

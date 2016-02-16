@@ -202,6 +202,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String distance = "";
             String duration = "";
 
+            if(result==null){
+                Toast.makeText(getBaseContext(), "No Points", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if(result.size()<1){
                 Toast.makeText(getBaseContext(), "No Points", Toast.LENGTH_SHORT).show();
                 return;

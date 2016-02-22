@@ -61,17 +61,15 @@ public class CadastroParteQuatroActivity extends AppCompatActivity {
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
 
-                writer.write("nome=" + nome + "&telefone=" + telefone);
+                writer.write("nome=" + nome + "&telefone=" + telefone + "&nascimento=" + aniversario);
 
                 writer.flush();
                 writer.close();
                 os.close();
-                int responseCode=conn.getResponseCode();
+                //int responseCode=conn.getResponseCode();
 
                 SharedPreferences dadosCadastroJunts = getSharedPreferences("Cadastro", MODE_PRIVATE);
                 SharedPreferences.Editor editor = dadosCadastroJunts.edit();
-
-
 
                 String line;
                 BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));

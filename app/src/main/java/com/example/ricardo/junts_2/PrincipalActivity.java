@@ -2,6 +2,7 @@ package com.example.ricardo.junts_2;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,16 +58,18 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       // ImageView propaganda = (ImageView) findViewById(R.id.propaganda);
-       // PropagandaTask taks = new PropagandaTask();
-       // taks.execute();
-
         new DownloadImageTask((ImageView) findViewById(R.id.propaganda))
-                .execute("http://junts.com.br/teaser-pasta/img/logo.png");
+                .execute("http://junts.com.br/propaganda.png");
 
-//        propaganda.setImageBitmap(bitmap);
-//propaganda.set
-
+        Boolean deuErro = getIntent().getBooleanExtra("deuErro", false);
+        if(deuErro == true) {
+            Toast.makeText(getApplicationContext(), "Erro no login.", Toast.LENGTH_LONG).show();
+            //Apagar dados de Login
+            SharedPreferences dadosCadastroJunts = getSharedPreferences("DadosLogin", MODE_PRIVATE);
+            SharedPreferences.Editor editor = dadosCadastroJunts.edit();
+            editor.clear();
+            editor.commit();
+        }
         String extrasJson = getIntent().getStringExtra("DadosCliente");
         if( extrasJson == null ) {
             Intent intentLogin = new Intent(PrincipalActivity.this, LoginActivity.class);

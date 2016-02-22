@@ -16,6 +16,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/propaganda"
-        android:src="@android:drawable/ic_dialog_alert"
-        android:background="#9df29a" />
+        android:src="@android:drawable/ic_dialog_info"
+        android:background="@android:color/holo_blue_dark" />
 </RelativeLayout>

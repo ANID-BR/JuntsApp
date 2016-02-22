@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Toast.makeText(getApplication().getBaseContext(), valorTeste, Toast.LENGTH_LONG).show();
 */
         super.onCreate(savedInstanceState);
-        showProgress(false);
+        //showProgress(false);
 
         setContentView(R.layout.activity_login);
         // Set up the login form.
@@ -155,12 +155,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String login = (String) itensCadastroJunts.get("login");
         String senha = (String) itensCadastroJunts.get("senha");
 
-        if(!login.isEmpty()) {
-            Log.e("JUNTS Dados Login", login.toString());
+        if(login != null) {
+            if(!login.isEmpty()) {
+                Log.e("JUNTS Dados Login", login.toString());
 
-            showProgress(true);
-            mAuthTask = new UserLoginTask(login.toString(), senha.toString());
-            mAuthTask.execute((Void) null);
+                showProgress(true);
+                mAuthTask = new UserLoginTask(login.toString(), senha.toString());
+                mAuthTask.execute((Void) null);
+            }
         }
 
     }
@@ -459,7 +461,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 String login = (String) itensCadastroJunts.get("login");
                 String senha = (String) itensCadastroJunts.get("senha");
 
-                if(login.isEmpty()) {
+                if(login == null) {
                     login = user.getText().toString();
                     senha = pass.getText().toString();
                     Log.e("JUNTS user", login);
@@ -490,6 +492,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         //TODO Verificar se o cliente realmente logou no JUNTS
                         final boolean s = SendPostToRadius(login, senha, response);
                         //response = OutputStream;
+                    } else {
+
+                        Intent i = new Intent(getApplicationContext(), PrincipalActivity.class);
+                        i.putExtra("deuErro",true);
+                        startActivity(i);
+
+                        showProgress(false);
+                        Log.e("JUNTS ERRO LOGIN", response);
                     }
                 }
                 else {
@@ -553,7 +563,7 @@ Log.e("JUNTS Aviso", String.valueOf(success));
                             mNM.notify(R.string.controle_tempo_acesso, notification);
                         }
                     },
-                1800000); // 30mim
+                1800); // 30mim
 
 
 

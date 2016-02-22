@@ -21,6 +21,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
     <string name="local_service_started">001</string>
+    <string name="controle_tempo_acesso">003</string>
     <string name="title_local_list">Locais</string>
     <string name="title_local_detail">Local Detail</string>
     <string name="title_activity_cadastro_parte_dois">cadastroParteDoisActivity</string>

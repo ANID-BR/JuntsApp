@@ -93,24 +93,9 @@ public class BackgroundJuntsService extends Service {
                 .setContentText("Há um ponto Junts próximo a você, clique para visualizá-lo")
                 .setContentIntent(contentIntent);
         Notification notification = notificationBuilder.build();
-        notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
+        notification.flags = Notification.FLAG_INSISTENT;
         mNM.notify(R.string.local_service_started, notification);
 
     }
-
-    public static void mostrarAvisoPropaganda(Context context) {
-        /*Intent intentPrincipal = new Intent(context, PrincipalActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Junts")
-                .setContentText("...")
-                .setContentIntent(contentIntent);
-        Notification notification = notificationBuilder.build();
-        notification.flags = Notification.FLAG_INSISTENT;
-        mNM.notify(R.string.local_service_started, notification);*/
-
-    }
-
 
 }

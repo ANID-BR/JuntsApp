@@ -3,6 +3,9 @@ package com.example.ricardo.junts_2;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,6 +23,7 @@ import android.os.Build.VERSION;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -46,6 +50,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -54,6 +59,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
@@ -102,43 +108,61 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       /*  String valorTeste = getCurrentSsid();
         Toast.makeText(getApplication().getBaseContext(), valorTeste, Toast.LENGTH_LONG).show();
 */
+        //TODO Verificar se ja esta logado e enviar o login
+        SharedPreferences dadosCadastro = getSharedPreferences("DadosLogin", MODE_PRIVATE);
+        Map<String, ?> itensCadastroJunts = dadosCadastro.getAll();
+
+        String login = (String) itensCadastroJunts.get("login");
+        String senha = (String) itensCadastroJunts.get("senha");
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        final Intent cadastroIntent = new Intent(getBaseContext(), CadastroActivity.class);
-        Button mCadastreButton = (Button) findViewById(R.id.cadastre_button);
-        mCadastreButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(cadastroIntent);
-            }
-        });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        if(login != "") {
+            showProgress(true);
+            mAuthTask = new UserLoginTask(login, senha);
+            mAuthTask.execute((Void) null);
+        } else {
+            showProgress(false);
+
+            setContentView(R.layout.activity_login);
+            // Set up the login form.
+            mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+            populateAutoComplete();
+
+            mPasswordView = (EditText) findViewById(R.id.password);
+            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                        attemptLogin();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+            mEmailSignInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
+
+            final Intent cadastroIntent = new Intent(getBaseContext(), CadastroActivity.class);
+            Button mCadastreButton = (Button) findViewById(R.id.cadastre_button);
+            mCadastreButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(cadastroIntent);
+                }
+            });
+
+
+        }
 
     }
 
@@ -488,8 +512,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
 
             if (success) {
+                //Aviso dos 30mim
+                new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
 
-                BackgroundJuntsService.mostrarAvisoPropaganda(getBaseContext());
+                            NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                            Intent intentPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
+                            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
+                            NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
+                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setContentTitle("Junts")
+                                    .setContentText("Ola, seus próximos 30mim de internet são patrocinados por:  ")
+                                    .setContentIntent(contentIntent);
+                            Notification notification = notificationBuilder.build();
+                            notification.flags = Notification.FLAG_INSISTENT | Notification.FLAG_NO_CLEAR;
+                            mNM.notify(R.string.controle_tempo_acesso, notification);
+                        }
+                    },
+                10000);
+
+
 
 
                 Toast.makeText(getApplication().getBaseContext(),"Bem Vindo ao JUNTS!",Toast.LENGTH_LONG).show();

@@ -15,5 +15,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/propaganda" />
+        android:id="@+id/propaganda"
+        android:src="@android:drawable/ic_dialog_alert"
+        android:background="#9df29a" />
 </RelativeLayout>

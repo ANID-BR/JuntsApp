@@ -57,12 +57,14 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ImageView propaganda = (ImageView) findViewById(R.id.propaganda);
-        PropagandaTask taks = new PropagandaTask();
-        taks.execute();
+       // ImageView propaganda = (ImageView) findViewById(R.id.propaganda);
+       // PropagandaTask taks = new PropagandaTask();
+       // taks.execute();
 
+        new DownloadImageTask((ImageView) findViewById(R.id.propaganda))
+                .execute("http://junts.com.br/teaser-pasta/img/logo.png");
 
-        propaganda.setImageBitmap(bitmap);
+//        propaganda.setImageBitmap(bitmap);
 //propaganda.set
 
         String extrasJson = getIntent().getStringExtra("DadosCliente");
@@ -187,6 +189,35 @@ public class PrincipalActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
+    // show The Image in a ImageView
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
 
     public class PropagandaTask extends AsyncTask<Void, Void, Bitmap> {
 

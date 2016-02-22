@@ -33,6 +33,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -417,9 +419,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
 
-                String login = "ricardo2";
-                String senha = "123123";
+                TextView user = (TextView) findViewById(R.id.email);
+                TextView pass = (TextView) findViewById(R.id.password);
 
+                String login = user.getText().toString();
+                String senha = pass.getText().toString();
+                Log.e("JUNTS user", login);
+                Log.e("JUNTS pass", senha);
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -437,11 +443,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     while ((line=br.readLine()) != null) {
                         response+=line;
-//                        Log.e("JUNTS JSON RESP", line);
+                        Log.e("JUNTS JSON RESP", response);
                     }
 
                     //TODO Verificar se o cliente realmente logou no JUNTS
-                    final boolean s = SendPostToRadius(login, senha);
+                    final boolean s = SendPostToRadius(login, senha,response);
                     //response = OutputStream;
                 }
                 else {
@@ -449,7 +455,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     //return false;
                 }
                 resposta = response;
-
+                Log.e("JUNTS JSON RESP", resposta);
                 return true;
 
             } catch (Exception e) {
@@ -482,6 +488,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
 
             if (success) {
+
+                BackgroundJuntsService.mostrarAvisoPropaganda(getBaseContext());
+
+
                 Toast.makeText(getApplication().getBaseContext(),"Bem Vindo ao JUNTS!",Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getBaseContext(), PrincipalActivity.class);
                
@@ -504,10 +514,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
 
-        public boolean SendPostToRadius(String login, String senha) {
+        public boolean SendPostToRadius(String login, String senha, String resposta) {
             URL url;
             String response = "Olá !";
-
+            Log.e("Resposta Login", response);
             try {
                 URL urlFake = new URL("http://www.google.com");
                 HttpURLConnection ucon = (HttpURLConnection) urlFake.openConnection();

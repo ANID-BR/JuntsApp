@@ -51,7 +51,7 @@ public class MyLocationListener implements LocationListener {
             }
         }
 
-        Toast.makeText(this.context, "Location changed: Lat: " + location.getLatitude() + " Lng: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this.context, "Location changed: Lat: " + location.getLatitude() + " Lng: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

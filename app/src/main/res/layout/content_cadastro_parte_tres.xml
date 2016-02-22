@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,15 +8,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".CadastroActivity">
-
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cadastro_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:visibility="gone"
-        android:layout_marginBottom="8dp" />
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.ricardo.junts_2.CadastroParteTresActivity"
+    tools:showIn="@layout/activity_cadastro_parte_tres">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -24,7 +19,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="0dp">
+        android:layout_marginBottom="0dp"
+        android:id="@+id/linearLayout">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -41,30 +37,20 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="País"
-                        android:id="@+id/paises" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
                     <EditText
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:id="@+id/telefone"
-                        android:hint="Telefone"
-                        android:inputType="phone" />
+                        android:id="@+id/aniversario"
+                        android:hint="Data de Nascimento"
+                        android:inputType="text" />
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Próximo"
-                    android:id="@+id/passo_um"
+                    android:id="@+id/passo_tres"
                     style="@style/AppTheme"
                     />
 
@@ -72,4 +58,12 @@
         </ScrollView>
 
     </LinearLayout>
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/datePicker"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

@@ -23,4 +23,8 @@
     <string name="local_service_started">001</string>
     <string name="title_local_list">Locais</string>
     <string name="title_local_detail">Local Detail</string>
+    <string name="title_activity_cadastro_parte_dois">cadastroParteDoisActivity</string>
+    <string name="title_activity_cadastro_parte_tres">CadastroParteTresActivity</string>
+    <string name="title_activity_cadastro_parte_quatro">CadastroParteQuatroActivity</string>
+    <string name="title_activity_confirmacao_cadastro">ConfirmacaoCadastroActivity</string>
 </resources>

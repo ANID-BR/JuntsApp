@@ -80,7 +80,43 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.LocalListActivity" />
         </activity>
-        <activity android:name=".CadastroActivity"></activity>
+        <activity android:name=".CadastroActivity" />
+        <activity
+            android:name=".cadastroParteDoisActivity"
+            android:label="@string/title_activity_cadastro_parte_dois"
+            android:parentActivityName=".CadastroActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ricardo.junts_2.CadastroActivity" />
+        </activity>
+        <activity
+            android:name=".CadastroParteTresActivity"
+            android:label="@string/title_activity_cadastro_parte_tres"
+            android:parentActivityName=".cadastroParteDoisActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ricardo.junts_2.cadastroParteDoisActivity" />
+        </activity>
+        <activity
+            android:name=".CadastroParteQuatroActivity"
+            android:label="@string/title_activity_cadastro_parte_quatro"
+            android:parentActivityName=".CadastroParteTresActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ricardo.junts_2.CadastroParteTresActivity" />
+        </activity>
+        <activity
+            android:name=".ConfirmacaoCadastroActivity"
+            android:label="@string/title_activity_confirmacao_cadastro"
+            android:parentActivityName=".CadastroParteQuatroActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ricardo.junts_2.CadastroParteQuatroActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -36,15 +36,38 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:id="@+id/aniversario"
-                        android:hint="Data de Nascimento"
-                        android:inputType="text" />
+                    android:layout_height="wrap_content"
+                    android:id="@id/textinput">
+
+
                 </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/semid">
+
+                    <NumberPicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dia"
+                        android:layout_above="@+id/linearLayout"
+                        android:layout_centerHorizontal="true" />
+                    <NumberPicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/mes"
+                        android:layout_above="@+id/linearLayout"
+                        android:layout_centerHorizontal="true" />
+                    <NumberPicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ano"
+                        android:layout_above="@+id/linearLayout"
+                        android:layout_centerHorizontal="true" />
+
+                </LinearLayout>
 
                 <Button
                     android:layout_width="fill_parent"
@@ -59,11 +82,7 @@
 
     </LinearLayout>
 
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/datePicker"
-        android:layout_above="@+id/linearLayout"
-        android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>

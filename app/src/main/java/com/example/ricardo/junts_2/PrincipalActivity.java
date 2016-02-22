@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -36,7 +37,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -48,6 +48,7 @@ public class PrincipalActivity extends AppCompatActivity
     private String nome;
     private String email;
     private Intent intentService;
+    protected Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +57,13 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        try {
-            ImageView propaganda = (ImageView) findViewById(R.id.propaganda);
-            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL("http://junts.com.br/teaser-pasta/img/logo.png").getContent());
-            propaganda.setImageBitmap(bitmap);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ImageView propaganda = (ImageView) findViewById(R.id.propaganda);
+        PropagandaTask taks = new PropagandaTask();
+        taks.execute();
+
+
+        propaganda.setImageBitmap(bitmap);
+//propaganda.set
 
         String extrasJson = getIntent().getStringExtra("DadosCliente");
         if( extrasJson == null ) {
@@ -187,6 +186,35 @@ public class PrincipalActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public class PropagandaTask extends AsyncTask<Void, Void, Bitmap> {
+
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            Bitmap bitmap = null;
+            try {
+                URL urlImage = new URL("http://junts.com.br/teaser-pasta/img/logo.png");
+
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inSampleSize = 1;
+
+                bitmap = BitmapFactory.decodeStream(urlImage.openConnection().getInputStream(),null, bmOptions);
+                Log.e("JUNTS PROPAGANDA","http://junts.com.br/teaser-pasta/img/logo.png");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            bitmap = bitmap;
+        }
     }
 
     public class LocaisJsonTask extends AsyncTask<Void, Void, Boolean> {

@@ -108,60 +108,59 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       /*  String valorTeste = getCurrentSsid();
         Toast.makeText(getApplication().getBaseContext(), valorTeste, Toast.LENGTH_LONG).show();
 */
-        //TODO Verificar se ja esta logado e enviar o login
-        SharedPreferences dadosCadastro = getSharedPreferences("DadosLogin", MODE_PRIVATE);
-        Map<String, ?> itensCadastroJunts = dadosCadastro.getAll();
-
-        String login = (String) itensCadastroJunts.get("login");
-        String senha = (String) itensCadastroJunts.get("senha");
-
         super.onCreate(savedInstanceState);
+        showProgress(false);
+
+        setContentView(R.layout.activity_login);
+        // Set up the login form.
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        populateAutoComplete();
+
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+
+        final Intent cadastroIntent = new Intent(getBaseContext(), CadastroActivity.class);
+        Button mCadastreButton = (Button) findViewById(R.id.cadastre_button);
+        mCadastreButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(cadastroIntent);
+            }
+        });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        if(login != "") {
+        //TODO Verificar se ja esta logado e enviar o login
+        SharedPreferences dadosLogin = getSharedPreferences("DadosLogin", MODE_PRIVATE);
+        Map<String, ?> itensCadastroJunts = dadosLogin.getAll();
+
+        String login = (String) itensCadastroJunts.get("login");
+        String senha = (String) itensCadastroJunts.get("senha");
+
+        if(!login.isEmpty()) {
+            Log.e("JUNTS Dados Login", login.toString());
+
             showProgress(true);
-            mAuthTask = new UserLoginTask(login, senha);
+            mAuthTask = new UserLoginTask(login.toString(), senha.toString());
             mAuthTask.execute((Void) null);
-        } else {
-            showProgress(false);
-
-            setContentView(R.layout.activity_login);
-            // Set up the login form.
-            mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-            populateAutoComplete();
-
-            mPasswordView = (EditText) findViewById(R.id.password);
-            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                    if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                        attemptLogin();
-                        return true;
-                    }
-                    return false;
-                }
-            });
-
-            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-            mEmailSignInButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    attemptLogin();
-                }
-            });
-
-            final Intent cadastroIntent = new Intent(getBaseContext(), CadastroActivity.class);
-            Button mCadastreButton = (Button) findViewById(R.id.cadastre_button);
-            mCadastreButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(cadastroIntent);
-                }
-            });
-
-
         }
 
     }
@@ -280,32 +279,38 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+                int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                        show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    }
+                });
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                mProgressView.animate().setDuration(shortAnimTime).alpha(
+                        show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                    }
+                });
+            } else {
+                // The ViewPropertyAnimator APIs are not available, so simply show
+                // and hide the relevant UI components.
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
         }
+
     }
 
     @Override
@@ -443,13 +448,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
 
+
                 TextView user = (TextView) findViewById(R.id.email);
                 TextView pass = (TextView) findViewById(R.id.password);
 
-                String login = user.getText().toString();
-                String senha = pass.getText().toString();
-                Log.e("JUNTS user", login);
-                Log.e("JUNTS pass", senha);
+                //TODO Verificar se ja esta logado e enviar o login
+                SharedPreferences dadosLogin = getSharedPreferences("DadosLogin", MODE_PRIVATE);
+                Map<String, ?> itensCadastroJunts = dadosLogin.getAll();
+
+                String login = (String) itensCadastroJunts.get("login");
+                String senha = (String) itensCadastroJunts.get("senha");
+
+                if(login.isEmpty()) {
+                    login = user.getText().toString();
+                    senha = pass.getText().toString();
+                    Log.e("JUNTS user", login);
+                    Log.e("JUNTS pass", senha);
+                }
+
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -467,20 +483,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     while ((line=br.readLine()) != null) {
                         response+=line;
-                        Log.e("JUNTS JSON RESP", response);
                     }
 
-                    //TODO Verificar se o cliente realmente logou no JUNTS
-                    final boolean s = SendPostToRadius(login, senha,response);
-                    //response = OutputStream;
+                    if(!response.equals("Nada")) {
+                        Log.e("JUNTS JSON RESP 1", response);
+                        //TODO Verificar se o cliente realmente logou no JUNTS
+                        final boolean s = SendPostToRadius(login, senha, response);
+                        //response = OutputStream;
+                    }
                 }
                 else {
                     response="Nada";
                     //return false;
                 }
                 resposta = response;
-                Log.e("JUNTS JSON RESP", resposta);
-                return true;
+
+                if(!resposta.equals("Nada")) {
+                    Log.e("JUNTS JSON RESP 2", resposta);
+                    return true;
+                }
+                return false;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -516,7 +538,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 new android.os.Handler().postDelayed(
                     new Runnable() {
                         public void run() {
-
+Log.e("JUNTS Aviso", String.valueOf(success));
                             NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
                             Intent intentPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
@@ -531,7 +553,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             mNM.notify(R.string.controle_tempo_acesso, notification);
                         }
                     },
-                10000);
+                1800000); // 30mim
 
 
 
@@ -545,9 +567,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 showProgress(false);
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-                Toast.makeText(getApplication().getBaseContext(),"Login ou senha incorretos.",Toast.LENGTH_LONG).show();
+                //mPasswordView.setError(getString(R.string.error_incorrect_password));
+                //mPasswordView.requestFocus();
+                //Toast.makeText(getApplication().getBaseContext(),"Login ou senha incorretos.",Toast.LENGTH_LONG).show();
             }
         }
 
@@ -602,6 +624,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 writer.flush();
                 writer.close();
                 os.close();
+
+                //Guarda o login
+                SharedPreferences dadosCadastroJunts = getSharedPreferences("DadosLogin", MODE_PRIVATE);
+                SharedPreferences.Editor editor = dadosCadastroJunts.edit();
+
+                editor.putString("login", login);
+                editor.putString("senha", senha);
+                editor.commit();
+
+                Log.e("JUNTS Radius", login);
+                Log.e("JUNTS Radius", senha);
+
                 int responseCode=conn.getResponseCode();
                 Log.e("TesteJUNTS", "Entrou!");
 

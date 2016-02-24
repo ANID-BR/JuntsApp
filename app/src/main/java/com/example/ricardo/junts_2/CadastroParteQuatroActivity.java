@@ -1,5 +1,6 @@
 package com.example.ricardo.junts_2;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,7 +47,7 @@ public class CadastroParteQuatroActivity extends AppCompatActivity {
             String aniversario = (String) itensCadastroJunts.get("aniversario");
 
             URL url;
-            //Log.e("Cadastro JUNTS", nome+telefone+aniversario);
+            Log.e("Cadastro JUNTS", nome+":"+telefone+":"+aniversario);
             try {
                 url = new URL("http://junts.com.br/cadastroApp.html");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -77,16 +78,15 @@ public class CadastroParteQuatroActivity extends AppCompatActivity {
                     Log.e("Cadasto JUNTS", line);
 
                     editor.putString("idUsuario", line);
-                    editor.commit();
                 }
-
                 String login    = (String) itensCadastroJunts.get("telefone");
                 String senha    = (String) itensCadastroJunts.get("telefone");
                 String response = "logar";
 
-                //TODO finalizar e logar o usuário
-               // boolean s = LoginActivity.UserLoginTask.SendPostToRadius(login, senha, response);
-
+                //Salva os dados do login
+                editor.putString("login", login);
+                editor.putString("senha", senha);
+                editor.commit();
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -100,7 +100,8 @@ public class CadastroParteQuatroActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
 
-            finishAffinity();
+            final Intent i = new Intent(getBaseContext(), ConfirmacaoCadastroActivity.class);
+            startActivity(i);
         }
     }
 

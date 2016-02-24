@@ -21,14 +21,16 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_principal" />
+            android:label="@string/title_activity_principal"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LogoutActivity"
             android:label="@string/title_activity_principal" />
         <activity
             android:name=".PrincipalActivity"
             android:label="@string/title_activity_principal"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -46,7 +48,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".BackgroundJuntsService"
@@ -66,7 +69,8 @@
             android:name=".LocalListActivity"
             android:label="@string/title_local_list"
             android:parentActivityName=".PrincipalActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.PrincipalActivity" />
@@ -85,7 +89,8 @@
             android:name=".cadastroParteDoisActivity"
             android:label="@string/title_activity_cadastro_parte_dois"
             android:parentActivityName=".CadastroActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.CadastroActivity" />
@@ -94,7 +99,8 @@
             android:name=".CadastroParteTresActivity"
             android:label="@string/title_activity_cadastro_parte_tres"
             android:parentActivityName=".cadastroParteDoisActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.cadastroParteDoisActivity" />
@@ -103,7 +109,8 @@
             android:name=".CadastroParteQuatroActivity"
             android:label="@string/title_activity_cadastro_parte_quatro"
             android:parentActivityName=".CadastroParteTresActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.CadastroParteTresActivity" />
@@ -112,7 +119,8 @@
             android:name=".ConfirmacaoCadastroActivity"
             android:label="@string/title_activity_confirmacao_cadastro"
             android:parentActivityName=".CadastroParteQuatroActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.CadastroParteQuatroActivity" />

@@ -39,6 +39,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -458,61 +461,90 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 SharedPreferences dadosLogin = getSharedPreferences("DadosLogin", MODE_PRIVATE);
                 Map<String, ?> itensCadastroJunts = dadosLogin.getAll();
 
-                String login = (String) itensCadastroJunts.get("login");
-                String senha = (String) itensCadastroJunts.get("senha");
+                String login      = (String) itensCadastroJunts.get("login");
+                String senha      = (String) itensCadastroJunts.get("senha");
+                String confirmado = (String) itensCadastroJunts.get("confirmado");
+Log.e("JUNTS confirmado", confirmado);
+                if(!confirmado.equals("confimado")) {
+                    final Intent i = new Intent(getBaseContext(), ConfirmacaoCadastroActivity.class);
+                    startActivity(i);
+                } else {
 
-                if(login == null) {
-                    login = user.getText().toString();
-                    senha = pass.getText().toString();
-                    Log.e("JUNTS user", login);
-                    Log.e("JUNTS pass", senha);
-                }
+                    if (login == null) {
+                        login = user.getText().toString();
+                        senha = pass.getText().toString();
 
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-
-                writer.write("login="+login+"&senha="+senha);
-
-                writer.flush();
-                writer.close();
-                os.close();
-                int responseCode=conn.getResponseCode();
-
-                if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                    String line;
-                    BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while ((line=br.readLine()) != null) {
-                        response+=line;
+                        Log.e("JUNTS user", login);
+                        Log.e("JUNTS pass", senha);
                     }
 
-                    if(!response.equals("Nada")) {
-                        Log.e("JUNTS JSON RESP 1", response);
-                        //TODO Verificar se o cliente realmente logou no JUNTS
-                        final boolean s = SendPostToRadius(login, senha, response);
-                        //response = OutputStream;
+                    OutputStream os = conn.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+
+                    writer.write("login=" + login + "&senha=" + senha);
+
+                    writer.flush();
+                    writer.close();
+                    os.close();
+                    int responseCode = conn.getResponseCode();
+
+                    if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                        String line;
+                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        while ((line = br.readLine()) != null) {
+                            response += line;
+                        }
+
+                        if (!response.equals("Nada")) {
+                            Log.e("JUNTS JSON RESP 1", response);
+
+                            //TODO Guardas dados do Cliente
+                            JSONObject trendLists;
+                            try {
+                                trendLists = new JSONObject(response);
+                                String nome = trendLists.getString("nome");
+                                String email = trendLists.getString("email");
+                                String foto = trendLists.getString("foto");
+                                String endereco = trendLists.getString("endereco");
+
+                                SharedPreferences dadosClienteJunts = getSharedPreferences("DadosCliente", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = dadosClienteJunts.edit();
+                                editor.putString("nome", nome);
+                                editor.putString("email", email);
+                                editor.putString("foto", foto);
+                                editor.putString("endereco", endereco);
+                                editor.commit();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            //TODO Verificar se o cliente realmente logou no JUNTS
+                            final boolean s = SendPostToRadius(login, senha, response);
+                            //response = OutputStream;
+                        } else {
+
+                            Intent i = new Intent(getApplicationContext(), PrincipalActivity.class);
+                            i.putExtra("deuErro", true);
+                            startActivity(i);
+
+                            showProgress(false);
+                            Log.e("JUNTS ERRO LOGIN", response);
+                        }
                     } else {
-
-                        Intent i = new Intent(getApplicationContext(), PrincipalActivity.class);
-                        i.putExtra("deuErro",true);
-                        startActivity(i);
-
-                        showProgress(false);
-                        Log.e("JUNTS ERRO LOGIN", response);
+                        response = "Nada";
+                        //return false;
                     }
-                }
-                else {
-                    response="Nada";
-                    //return false;
-                }
-                resposta = response;
+                    resposta = response;
 
-                if(!resposta.equals("Nada")) {
-                    Log.e("JUNTS JSON RESP 2", resposta);
-                    return true;
+                    if (!resposta.equals("Nada")) {
+                        Log.e("JUNTS JSON RESP 2", resposta);
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -554,7 +586,8 @@ Log.e("JUNTS Aviso", String.valueOf(success));
                             Intent intentPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
                             PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
                             NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
-                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setSmallIcon(R.mipmap.junts_logo)
+                                    .setCategory(Notification.CATEGORY_PROGRESS)
                                     .setContentTitle("Junts")
                                     .setContentText("Ola, seus próximos 30mim de internet são patrocinados por:  ")
                                     .setContentIntent(contentIntent);
@@ -563,7 +596,7 @@ Log.e("JUNTS Aviso", String.valueOf(success));
                             mNM.notify(R.string.controle_tempo_acesso, notification);
                         }
                     },
-                1800); // 30mim
+                18000); // 30mim
 
 
 
@@ -641,7 +674,10 @@ Log.e("JUNTS Aviso", String.valueOf(success));
 
                 editor.putString("login", login);
                 editor.putString("senha", senha);
-                editor.commit();
+
+                //TODO Tirar
+                //editor.putString("confirmado", "não");
+                //editor.commit();
 
                 Log.e("JUNTS Radius", login);
                 Log.e("JUNTS Radius", senha);

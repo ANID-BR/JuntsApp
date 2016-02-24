@@ -10,14 +10,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.ricardo.junts_2.ConfirmacaoCadastroActivity"
-    tools:showIn="@layout/activity_confirmacao_cadastro">
+    tools:showIn="@layout/activity_confirmacao_cadastro"
+    android:id="@+id/contentSMS">
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/respostaSMS"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -26,14 +27,14 @@
         android:layout_height="wrap_content"
         android:text="Confirmar"
         android:id="@+id/confirmar"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/respostaSMS"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="texto de Confirmação"
         android:id="@+id/textoConfirmacao"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"

@@ -61,7 +61,8 @@ public class BackgroundJuntsService extends Service {
         intentPrincipal.putExtra("DadosCliente", dadosCliente);
         PendingIntent contentIntent = PendingIntent.getActivity(BackgroundJuntsService.this, 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setCategory(Notification.CATEGORY_SOCIAL)
+                .setSmallIcon(R.mipmap.junts_logo)
                 .setContentTitle("Junts")
                 .setContentText("Sua Internet em qualquer lugar!")
                 .setContentIntent(contentIntent);
@@ -88,7 +89,7 @@ public class BackgroundJuntsService extends Service {
         intentPrincipal.putExtra("longitude", latitudeLongitudePonto.longitude);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.junts_logo)
                 .setContentTitle("Junts")
                 .setContentText("Há um ponto Junts próximo a você, clique para visualizá-lo")
                 .setContentIntent(contentIntent);

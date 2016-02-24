@@ -39,6 +39,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -48,6 +49,8 @@ public class PrincipalActivity extends AppCompatActivity
     private static final int PERMISSION_REQUEST_CODE = 1;
     private String nome;
     private String email;
+    private String foto;
+    private String endereco;
     private Intent intentService;
     protected Bitmap bitmap;
 
@@ -59,7 +62,7 @@ public class PrincipalActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         new DownloadImageTask((ImageView) findViewById(R.id.propaganda))
-                .execute("http://junts.com.br/propaganda.png");
+                .execute("http://junts.com.br/propaganda.php");
 
         Boolean deuErro = getIntent().getBooleanExtra("deuErro", false);
         if(deuErro == true) {
@@ -75,14 +78,23 @@ public class PrincipalActivity extends AppCompatActivity
             Intent intentLogin = new Intent(PrincipalActivity.this, LoginActivity.class);
             startActivity(intentLogin);
         } else {
-            JSONObject trendLists;
+            /*JSONObject trendLists;
             try {
                 trendLists = new JSONObject(extrasJson);
                 nome = trendLists.getString("nome");
                 email = trendLists.getString("email");
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
+
+            SharedPreferences dadosCliente    = getSharedPreferences("DadosCliente", MODE_PRIVATE);
+            Map<String, ?> itensDadosClientes = dadosCliente.getAll();
+
+            nome     = (String) itensDadosClientes.get("nome");
+            email    = (String) itensDadosClientes.get("email");
+            foto     = (String) itensDadosClientes.get("foto");
+            endereco = (String) itensDadosClientes.get("endereco");
+            Log.e("JUNTS FOTO", foto);
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -97,10 +109,22 @@ public class PrincipalActivity extends AppCompatActivity
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.setDrawerListener(toggle);
+
             toggle.syncState();
 
+            //Menu lateral troca de imagem
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+            //View header = navigationView.inflateHeaderView(R.layout.nav_header_principal);
+            View header = navigationView.getHeaderView(0);
+
+            try {
+                new DownloadImageTask((ImageView) header.findViewById(R.id.fotoCliente))
+                        .execute("http://junts.com.br/fotosPerfis/"+foto);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
             if ( ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
                 if ( ActivityCompat.shouldShowRequestPermissionRationale(PrincipalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -217,7 +241,12 @@ public class PrincipalActivity extends AppCompatActivity
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            try {
+                bmImage.setImageBitmap(result);
+            }  catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

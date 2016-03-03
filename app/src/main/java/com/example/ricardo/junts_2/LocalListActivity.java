@@ -2,6 +2,7 @@ package com.example.ricardo.junts_2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ricardo.junts_2.dummy.LocalConteudo;
 
@@ -131,7 +133,26 @@ public class LocalListActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).seq);
-            holder.mContentView.setText(mValues.get(position).nome);
+
+
+            //Distancia do local
+            String novaDisancia = "";
+            if(MyLocationListener.localizacaoAtual != null) {
+                Location minhaLocalizacao = new Location("Minha Localizacao");
+                minhaLocalizacao.setLatitude((Double) MyLocationListener.localizacaoAtual.get("latitude"));
+                minhaLocalizacao.setLongitude((Double) MyLocationListener.localizacaoAtual.get("longitude"));
+
+                Location localizacaoPonto = new Location("Localizacao Ponto");
+                localizacaoPonto.setLatitude(mValues.get(position).latitude);
+                localizacaoPonto.setLongitude(mValues.get(position).longitude);
+
+                float distancia = minhaLocalizacao.distanceTo(localizacaoPonto);
+                novaDisancia = String.valueOf(distancia);
+            } else {
+                Toast.makeText(getApplicationContext(), "Verificando sua localização...", Toast.LENGTH_LONG).show();
+            }
+
+            holder.mContentView.setText(mValues.get(position).nome+" ("+novaDisancia+" Metros)");
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

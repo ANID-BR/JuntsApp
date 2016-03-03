@@ -28,4 +28,5 @@
     <string name="title_activity_cadastro_parte_tres">CadastroParteTresActivity</string>
     <string name="title_activity_cadastro_parte_quatro">CadastroParteQuatroActivity</string>
     <string name="title_activity_confirmacao_cadastro">ConfirmacaoCadastroActivity</string>
+    <string name="title_activity_propaganda">PropagandaActivity</string>
 </resources>

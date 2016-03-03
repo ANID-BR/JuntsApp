@@ -47,7 +47,7 @@ public class MyLocationListener implements LocationListener {
             localizacaoPonto.setLongitude(local.getValue().longitude);
 
             if(location.distanceTo(localizacaoPonto) < 3000) {
-                BackgroundJuntsService.alertaPontoProximo(this.context, new LatLng(local.getValue().latitude, local.getValue().longitude));
+                //BackgroundJuntsService.alertaPontoProximo(this.context, new LatLng(local.getValue().latitude, local.getValue().longitude));
             }
         }
 

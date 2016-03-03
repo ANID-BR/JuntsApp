@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.LOCATION_HARDWARE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -29,8 +30,8 @@
         <activity
             android:name=".PrincipalActivity"
             android:label="@string/title_activity_principal"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -69,8 +70,8 @@
             android:name=".LocalListActivity"
             android:label="@string/title_local_list"
             android:parentActivityName=".PrincipalActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.PrincipalActivity" />
@@ -89,8 +90,8 @@
             android:name=".cadastroParteDoisActivity"
             android:label="@string/title_activity_cadastro_parte_dois"
             android:parentActivityName=".CadastroActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.CadastroActivity" />
@@ -99,8 +100,8 @@
             android:name=".CadastroParteTresActivity"
             android:label="@string/title_activity_cadastro_parte_tres"
             android:parentActivityName=".cadastroParteDoisActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.cadastroParteDoisActivity" />
@@ -109,8 +110,8 @@
             android:name=".CadastroParteQuatroActivity"
             android:label="@string/title_activity_cadastro_parte_quatro"
             android:parentActivityName=".CadastroParteTresActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.CadastroParteTresActivity" />
@@ -119,11 +120,27 @@
             android:name=".ConfirmacaoCadastroActivity"
             android:label="@string/title_activity_confirmacao_cadastro"
             android:parentActivityName=".CadastroParteQuatroActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ricardo.junts_2.CadastroParteQuatroActivity" />
+        </activity>
+
+        <receiver android:name=".ConectividadeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".PropagandaActivity"
+            android:label="@string/title_activity_propaganda"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ricardo.junts_2.PrincipalActivity" />
         </activity>
     </application>
 

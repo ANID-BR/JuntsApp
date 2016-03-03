@@ -6,9 +6,14 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -80,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    //private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -115,6 +120,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //showProgress(false);
 
         setContentView(R.layout.activity_login);
+
+        //TODO Verificar se o login é o mesmo que esta guardado
+        SharedPreferences dadosLogin = getSharedPreferences("DadosLogin", MODE_PRIVATE);
+        Map<String, ?> itensCadastroJunts = dadosLogin.getAll();
+        String loginCliente = (String) itensCadastroJunts.get("login");
+
+        Boolean testeLogin = TesteConnectado();
+
+        if(testeLogin == true) {
+            //TODO enviar para a propaganda caso não esteja logado
+            Intent i = new Intent(getBaseContext(), PropagandaActivity.class);
+            startActivity(i);
+        }
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -151,23 +170,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        //TODO Verificar se ja esta logado e enviar o login
-        SharedPreferences dadosLogin = getSharedPreferences("DadosLogin", MODE_PRIVATE);
-        Map<String, ?> itensCadastroJunts = dadosLogin.getAll();
+    }
 
-        String login = (String) itensCadastroJunts.get("login");
-        String senha = (String) itensCadastroJunts.get("senha");
-
-        if(login != null) {
-            if(!login.isEmpty()) {
-                Log.e("JUNTS Dados Login", login.toString());
-
-                showProgress(true);
-                mAuthTask = new UserLoginTask(login.toString(), senha.toString());
-                mAuthTask.execute((Void) null);
-            }
-        }
-
+    public static boolean TesteConnectado() {
+       //TODO
+       return true;
     }
 
     private void populateAutoComplete() {
@@ -226,9 +233,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+        //if (mAuthTask != null) {
+        //    return;
+        //}
 
         // Reset errors.
         mEmailView.setError(null);
@@ -259,9 +266,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+            JuntsLogin mAuthTask = new JuntsLogin();
+            mAuthTask.logar(email, password);
         }
     }
 
@@ -418,283 +425,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             e.printStackTrace();
         }
         return "";
-    }
-
-
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-        String resposta = "Nada Encontrado";
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            URL url;
-            String response = "";
-            try {
-                url = new URL("http://junts.com.br/loginApp.html");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-
-                TextView user = (TextView) findViewById(R.id.email);
-                TextView pass = (TextView) findViewById(R.id.password);
-
-                //TODO Verificar se ja esta logado e enviar o login
-                SharedPreferences dadosLogin = getSharedPreferences("DadosLogin", MODE_PRIVATE);
-                Map<String, ?> itensCadastroJunts = dadosLogin.getAll();
-
-                String login      = (String) itensCadastroJunts.get("login");
-                String senha      = (String) itensCadastroJunts.get("senha");
-                String confirmado = (String) itensCadastroJunts.get("confirmado");
-Log.e("JUNTS confirmado", confirmado);
-                if(!confirmado.equals("confimado")) {
-                    final Intent i = new Intent(getBaseContext(), ConfirmacaoCadastroActivity.class);
-                    startActivity(i);
-                } else {
-
-                    if (login == null) {
-                        login = user.getText().toString();
-                        senha = pass.getText().toString();
-
-                        Log.e("JUNTS user", login);
-                        Log.e("JUNTS pass", senha);
-                    }
-
-                    OutputStream os = conn.getOutputStream();
-                    BufferedWriter writer = new BufferedWriter(
-                            new OutputStreamWriter(os, "UTF-8"));
-
-                    writer.write("login=" + login + "&senha=" + senha);
-
-                    writer.flush();
-                    writer.close();
-                    os.close();
-                    int responseCode = conn.getResponseCode();
-
-                    if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                        String line;
-                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        while ((line = br.readLine()) != null) {
-                            response += line;
-                        }
-
-                        if (!response.equals("Nada")) {
-                            Log.e("JUNTS JSON RESP 1", response);
-
-                            //TODO Guardas dados do Cliente
-                            JSONObject trendLists;
-                            try {
-                                trendLists = new JSONObject(response);
-                                String nome = trendLists.getString("nome");
-                                String email = trendLists.getString("email");
-                                String foto = trendLists.getString("foto");
-                                String endereco = trendLists.getString("endereco");
-
-                                SharedPreferences dadosClienteJunts = getSharedPreferences("DadosCliente", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = dadosClienteJunts.edit();
-                                editor.putString("nome", nome);
-                                editor.putString("email", email);
-                                editor.putString("foto", foto);
-                                editor.putString("endereco", endereco);
-                                editor.commit();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-
-                            //TODO Verificar se o cliente realmente logou no JUNTS
-                            final boolean s = SendPostToRadius(login, senha, response);
-                            //response = OutputStream;
-                        } else {
-
-                            Intent i = new Intent(getApplicationContext(), PrincipalActivity.class);
-                            i.putExtra("deuErro", true);
-                            startActivity(i);
-
-                            showProgress(false);
-                            Log.e("JUNTS ERRO LOGIN", response);
-                        }
-                    } else {
-                        response = "Nada";
-                        //return false;
-                    }
-                    resposta = response;
-
-                    if (!resposta.equals("Nada")) {
-                        Log.e("JUNTS JSON RESP 2", resposta);
-                        return true;
-                    }
-                    return false;
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-            /*try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }*/
-
-            /*for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }*/
-
-            // TODO: register the new account here.
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(true);
-
-            if (success) {
-                //Aviso dos 30mim
-                new android.os.Handler().postDelayed(
-                    new Runnable() {
-                        public void run() {
-Log.e("JUNTS Aviso", String.valueOf(success));
-                            NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-                            Intent intentPrincipal = new Intent(getApplicationContext(), PrincipalActivity.class);
-                            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intentPrincipal, PendingIntent.FLAG_CANCEL_CURRENT);
-                            NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
-                                    .setSmallIcon(R.mipmap.junts_logo)
-                                    .setCategory(Notification.CATEGORY_PROGRESS)
-                                    .setContentTitle("Junts")
-                                    .setContentText("Ola, seus próximos 30mim de internet são patrocinados por:  ")
-                                    .setContentIntent(contentIntent);
-                            Notification notification = notificationBuilder.build();
-                            notification.flags = Notification.FLAG_INSISTENT | Notification.FLAG_NO_CLEAR;
-                            mNM.notify(R.string.controle_tempo_acesso, notification);
-                        }
-                    },
-                18000); // 30mim
-
-
-
-
-                Toast.makeText(getApplication().getBaseContext(),"Bem Vindo ao JUNTS!",Toast.LENGTH_LONG).show();
-                Intent i = new Intent(getBaseContext(), PrincipalActivity.class);
-               
-                i.putExtra("DadosCliente", resposta);
-
-                startActivity(i);
-
-                showProgress(false);
-            } else {
-                //mPasswordView.setError(getString(R.string.error_incorrect_password));
-                //mPasswordView.requestFocus();
-                //Toast.makeText(getApplication().getBaseContext(),"Login ou senha incorretos.",Toast.LENGTH_LONG).show();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-
-
-        public boolean SendPostToRadius(String login, String senha, String resposta) {
-            URL url;
-            String response = "Olá !";
-            Log.e("Resposta Login", response);
-            try {
-                URL urlFake = new URL("http://www.google.com");
-                HttpURLConnection ucon = (HttpURLConnection) urlFake.openConnection();
-                ucon.setInstanceFollowRedirects(false);
-                URL secondURL = new URL(ucon.getHeaderField("Location"));
-
-                Log.e("TesteJUNTS", ucon.getHeaderField("Location"));
-
-                //TODO teste para pegar dados da URL
-                String URLServer = ucon.getHeaderField("Location");
-                String[] serverSliced = URLServer.split("/");
-                String serverJunts = serverSliced[2];
-                if(serverJunts.indexOf("google") == -1) {
-                    //Guarda em variavel informaçao do servidor
-                    SharedPreferences dadosServerJunts = getSharedPreferences("Dados",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = dadosServerJunts.edit();
-                    editor.putString("URLJunts", serverJunts);
-                    editor.commit();
-
-                    Log.e("LoginRadius", serverJunts);
-                }
-
-                url = new URL(ucon.getHeaderField("Location"));
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-
-                writer.write("username=" + login + "&password=" + senha);
-
-                writer.flush();
-                writer.close();
-                os.close();
-
-                //Guarda o login
-                SharedPreferences dadosCadastroJunts = getSharedPreferences("DadosLogin", MODE_PRIVATE);
-                SharedPreferences.Editor editor = dadosCadastroJunts.edit();
-
-                editor.putString("login", login);
-                editor.putString("senha", senha);
-
-                //TODO Tirar
-                //editor.putString("confirmado", "não");
-                //editor.commit();
-
-                Log.e("JUNTS Radius", login);
-                Log.e("JUNTS Radius", senha);
-
-                int responseCode=conn.getResponseCode();
-                Log.e("TesteJUNTS", "Entrou!");
-
-                //Log.e("LoginRadius", responseCode);
-                return true;
-
-            } catch (Exception e) {
-                Log.e("JUNTS Exception", "Deu Erro");
-                e.printStackTrace();
-            }
-            return false;
-
-        }
     }
 
     @Override

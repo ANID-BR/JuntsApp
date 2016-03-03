@@ -1,5 +1,9 @@
 package com.example.ricardo.junts_2.dummy;
 
+import android.location.Location;
+
+import com.example.ricardo.junts_2.MyLocationListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,12 +46,16 @@ public class LocalConteudo {
             String localizacao = itemJsonArray.getString("localizacao");
             Double latitude = itemJsonArray.getDouble("latitude");
             Double longitude = itemJsonArray.getDouble("longitude");
+
+
+
             addItem(new LocalItem(String.valueOf(i+1),
                                   id,
                                   nome,
                                   localizacao,
                                   latitude,
-                                  longitude));
+                                  longitude
+                                  ));
         }
 
     }

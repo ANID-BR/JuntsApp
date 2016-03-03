@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,10 +61,6 @@ public class PrincipalActivity extends AppCompatActivity
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        new DownloadImageTask((ImageView) findViewById(R.id.propaganda))
-                .execute("http://junts.com.br/propaganda.php");
-
         Boolean deuErro = getIntent().getBooleanExtra("deuErro", false);
         if(deuErro == true) {
             Toast.makeText(getApplicationContext(), "Erro no login.", Toast.LENGTH_LONG).show();
@@ -73,11 +70,11 @@ public class PrincipalActivity extends AppCompatActivity
             editor.clear();
             editor.commit();
         }
-        String extrasJson = getIntent().getStringExtra("DadosCliente");
-        if( extrasJson == null ) {
-            Intent intentLogin = new Intent(PrincipalActivity.this, LoginActivity.class);
-            startActivity(intentLogin);
-        } else {
+        //String extrasJson = getIntent().getStringExtra("DadosCliente");
+        //if( extrasJson == null ) {
+            //Intent intentLogin = new Intent(PrincipalActivity.this, LoginActivity.class);
+            //startActivity(intentLogin);
+        //} else {
             /*JSONObject trendLists;
             try {
                 trendLists = new JSONObject(extrasJson);
@@ -141,7 +138,7 @@ public class PrincipalActivity extends AppCompatActivity
             intentService.putExtra("DadosCliente", getIntent().getStringExtra("DadosCliente"));
             startService(intentService);
 
-        }
+        //}
 
     }
 
@@ -218,8 +215,6 @@ public class PrincipalActivity extends AppCompatActivity
     }
 
 
-    // show The Image in a ImageView
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
@@ -250,36 +245,7 @@ public class PrincipalActivity extends AppCompatActivity
         }
     }
 
-
-    public class PropagandaTask extends AsyncTask<Void, Void, Bitmap> {
-
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            Bitmap bitmap = null;
-            try {
-                URL urlImage = new URL("http://junts.com.br/teaser-pasta/img/logo.png");
-
-                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                bmOptions.inSampleSize = 1;
-
-                bitmap = BitmapFactory.decodeStream(urlImage.openConnection().getInputStream(),null, bmOptions);
-                Log.e("JUNTS PROPAGANDA","http://junts.com.br/teaser-pasta/img/logo.png");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            bitmap = bitmap;
-        }
-    }
-
+    // show The Image in a ImageView
     public class LocaisJsonTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override

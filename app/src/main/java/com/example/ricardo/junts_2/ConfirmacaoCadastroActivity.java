@@ -50,6 +50,8 @@ public class ConfirmacaoCadastroActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = dadosCadastroJunts.edit();
 
                     editor.putString("confirmado", "confimado");
+                    editor.putString("login", telefone);
+                    editor.putString("senha", telefone);
                     editor.commit();
 
                     //Joga para o login e loga

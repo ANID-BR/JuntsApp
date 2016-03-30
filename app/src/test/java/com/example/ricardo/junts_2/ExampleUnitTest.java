@@ -1,4 +1,4 @@
-package com.example.ricardo.junts_2;
+package com.junts.ricardo.junts_2;
 
 import org.junit.Test;
 

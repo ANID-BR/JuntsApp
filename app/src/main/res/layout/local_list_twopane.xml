@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="com.example.ricardo.junts_2.LocalListActivity">
+    tools:context="com.junts.ricardo.junts_2.LocalListActivity">
 
     <!--
     This layout is a two-pane layout for the Locais
@@ -32,7 +32,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.example.ricardo.junts_2.LocalListActivity"
+        tools:context="com.junts.ricardo.junts_2.LocalListActivity"
         tools:listitem="@layout/local_list_content" />
 
     <FrameLayout

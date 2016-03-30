@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.ricardo.junts_2">
+    package="com.junts.ricardo.junts_2">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -21,14 +22,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name="com.junts.ricardo.junts_2.LoginActivity"
             android:label="@string/title_activity_principal"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LogoutActivity"
+            android:name="com.junts.ricardo.junts_2.LogoutActivity"
             android:label="@string/title_activity_principal" />
         <activity
-            android:name=".PrincipalActivity"
+            android:name="com.junts.ricardo.junts_2.PrincipalActivity"
             android:label="@string/title_activity_principal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -42,22 +43,22 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyDAG91doE_lUFp72otvxUVVsG9WF1tfJtU" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name="com.junts.ricardo.junts_2.MapsActivity"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".BackgroundJuntsService"
+            android:name="com.junts.ricardo.junts_2.BackgroundJuntsService"
             android:enabled="true" />
 
         <activity
-            android:name=".SplashScreenActivity"
+            android:name="com.junts.ricardo.junts_2.SplashScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
@@ -67,80 +68,99 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LocalListActivity"
+            android:name="com.junts.ricardo.junts_2.LocalListActivity"
             android:label="@string/title_local_list"
-            android:parentActivityName=".PrincipalActivity"
+            android:parentActivityName="com.junts.ricardo.junts_2.PrincipalActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ricardo.junts_2.PrincipalActivity" />
+                android:value="com.junts.ricardo.junts_2.PrincipalActivity" />
         </activity>
         <activity
-            android:name=".LocalDetailActivity"
+            android:name="com.junts.ricardo.junts_2.LocalDetailActivity"
             android:label="@string/title_local_detail"
-            android:parentActivityName=".LocalListActivity"
+            android:parentActivityName="com.junts.ricardo.junts_2.LocalListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ricardo.junts_2.LocalListActivity" />
+                android:value="com.junts.ricardo.junts_2.LocalListActivity" />
         </activity>
-        <activity android:name=".CadastroActivity" />
+        <activity android:name="com.junts.ricardo.junts_2.CadastroActivity" />
         <activity
-            android:name=".cadastroParteDoisActivity"
-            android:label="@string/title_activity_cadastro_parte_dois"
-            android:parentActivityName=".CadastroActivity"
+            android:name="com.junts.ricardo.junts_2.cadastroParteDoisActivity"
+            android:label="@string/title_activity_cadastro"
+            android:parentActivityName="com.junts.ricardo.junts_2.CadastroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ricardo.junts_2.CadastroActivity" />
+                android:value="com.junts.ricardo.junts_2.CadastroActivity" />
         </activity>
         <activity
-            android:name=".CadastroParteTresActivity"
-            android:label="@string/title_activity_cadastro_parte_tres"
-            android:parentActivityName=".cadastroParteDoisActivity"
+            android:name="com.junts.ricardo.junts_2.CadastroParteTresActivity"
+            android:label="@string/title_activity_cadastro"
+            android:parentActivityName="com.junts.ricardo.junts_2.cadastroParteDoisActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ricardo.junts_2.cadastroParteDoisActivity" />
+                android:value="com.junts.ricardo.junts_2.cadastroParteDoisActivity" />
         </activity>
         <activity
-            android:name=".CadastroParteQuatroActivity"
-            android:label="@string/title_activity_cadastro_parte_quatro"
-            android:parentActivityName=".CadastroParteTresActivity"
+            android:name="com.junts.ricardo.junts_2.CadastroParteQuatroActivity"
+            android:label="@string/title_activity_cadastro"
+            android:parentActivityName="com.junts.ricardo.junts_2.CadastroParteTresActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ricardo.junts_2.CadastroParteTresActivity" />
+                android:value="com.junts.ricardo.junts_2.CadastroParteTresActivity" />
         </activity>
         <activity
-            android:name=".ConfirmacaoCadastroActivity"
+            android:name="com.junts.ricardo.junts_2.ConfirmacaoCadastroActivity"
             android:label="@string/title_activity_confirmacao_cadastro"
-            android:parentActivityName=".CadastroParteQuatroActivity"
+            android:parentActivityName="com.junts.ricardo.junts_2.CadastroParteQuatroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ricardo.junts_2.CadastroParteQuatroActivity" />
+                android:value="com.junts.ricardo.junts_2.CadastroParteQuatroActivity" />
         </activity>
 
-        <receiver android:name=".ConectividadeReceiver">
+        <receiver android:name="com.junts.ricardo.junts_2.ConectividadeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name=".PropagandaActivity"
+            android:name="com.junts.ricardo.junts_2.PropagandaActivity"
             android:label="@string/title_activity_propaganda"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ricardo.junts_2.PrincipalActivity" />
+                android:value="com.junts.ricardo.junts_2.PrincipalActivity" />
+        </activity>
+        <activity
+            android:name="com.junts.ricardo.junts_2.CadastroGeneroActivity"
+            android:label="@string/title_activity_genero"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.junts.ricardo.junts_2.PontosProximosActivity"
+            android:label="@string/title_activity_pontos_proximos" />
+        <activity
+            android:name="com.junts.ricardo.junts_2.CadastroEmailActivity"
+            android:label="@string/title_activity_cadastro_email"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.junts.ricardo.junts_2.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.junts.ricardo.junts_2.PrincipalActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.junts.ricardo.junts_2.PrincipalActivity" />
         </activity>
     </application>
 

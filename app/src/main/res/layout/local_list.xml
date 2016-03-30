@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.ricardo.junts_2.LocalListActivity"
+    tools:context="com.junts.ricardo.junts_2.LocalListActivity"
     tools:listitem="@layout/local_list_content" />

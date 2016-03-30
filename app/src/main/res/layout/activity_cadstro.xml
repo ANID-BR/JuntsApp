@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".CadastroActivity">
+    tools:context=".CadastroActivity"
+    >
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -37,6 +38,15 @@
                 android:layout_height="match_parent"
                 android:id="@+id/cadastro_campos_form"
                 android:baselineAligned="false">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Número do Celular"
+                    android:id="@+id/titulo_cadastro"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_centerHorizontal="true" />
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"

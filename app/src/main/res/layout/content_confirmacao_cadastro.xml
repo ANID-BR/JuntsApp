@@ -9,10 +9,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.ricardo.junts_2.ConfirmacaoCadastroActivity"
+    tools:context="com.junts.ricardo.junts_2.ConfirmacaoCadastroActivity"
     tools:showIn="@layout/activity_confirmacao_cadastro"
     android:id="@+id/contentSMS">
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Confirmação de Cadastro"
+        android:id="@+id/titulo_cadastro"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,4 +46,29 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="53dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxConfirmacao"
+        android:clickable="true"
+        android:checked="false"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_below="@+id/respostaSMS"
+        android:layout_alignLeft="@+id/respostaSMS"
+        android:layout_alignStart="@+id/respostaSMS" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Concordo com o termo."
+        android:id="@+id/textoConcordoTermo"
+        android:gravity="center_horizontal"
+        android:layout_alignTop="@+id/checkBoxConfirmacao"
+        android:layout_alignBottom="@+id/checkBoxConfirmacao"
+        android:layout_toRightOf="@+id/checkBoxConfirmacao"
+        android:layout_alignBaseline="@+id/checkBoxConfirmacao"
+        android:textSize="17dp" />
+
 </RelativeLayout>

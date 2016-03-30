@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.ricardo.junts_2.cadastroParteDoisActivity"
+    tools:context="com.junts.ricardo.junts_2.cadastroParteDoisActivity"
     tools:showIn="@layout/activity_cadastro_parte_dois">
 
     <LinearLayout
@@ -32,6 +32,14 @@
                 android:layout_height="match_parent"
                 android:id="@+id/cadastro_campos_form"
                 android:baselineAligned="false">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Seu Nome"
+                    android:id="@+id/titulo_cadastro"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_centerHorizontal="true" />
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
